@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+ 
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular-route.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body background="/img/assinatura1.jpg">
+    <nav class="navbar navbar-inverse" role="navigation" style="padding-left:130px;">
+        <ul class="nav navbar-nav">
+            <li><a href="/"><span class="glyphicon glyphicon-home"></span>&nbsp;Home</a></li>
+            <li><a href="/about">About us</a></li>
+            <li><a href="/contact">Contact us</a></li>
+            <li><a href="/register">Register</a></li>
+            <li class="active" style="margin-left: 780px;"><a href="/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login <span class="sr-only">(current)</span></a></li>
+        </ul>
+    </nav>
+    <!--
+    you can substitue the span of reauth email for a input with the email and
+    include the remember me checkbox
+    -->
+    <div style="padding-left:38%; position:absolute " class="container">
+        <div class="wrapper col-xs-4">
+            <form action="" method="post" id="Login_Form" class="form-signin">
+                <h3 style="color:whitesmoke" class="form-signin-heading">Welcome Back! Please Sign In</h3>
+                <hr class="colorgraph"><br>
+                <input type="text" class="form-control " id="username" name="Username" placeholder="Username" required="" autofocus="" required/>
+                <br>
+                <input type="password" class="form-control" id="password" name="Password" placeholder="Password" required="" required />
+                <br>
+
+                <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit">Login</button>
+                </br>
+                <div id="result" style="color:red;"></div>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+    <script>
+        (function ($) {
+            function processForm(e) {
+                var object = new Object({
+                    nome: String,
+                    login: String,
+                    senha: String
+
+                });
+                object.login = document.getElementById("username").value;
+                object.senha = document.getElementById("password").value;
+
+                $.ajax({
+                    url: 'http://localhost:8000/api/login/',
+                    dataType: 'json',
+                    type: 'post',
+                    contentType: 'application/x-www-form-urlencoded',
+                    data: object,
+                    success: function (object, textStatus, jQxhr) {
+                        $('#response pre').html(object);
+                        if (object.message == 'Login Efetuado com Sucesso!') {
+                            window.localStorage.setItem('usuario', JSON.stringify(object.usuario));
+                            window.location.href = "user/";
+                        } else {
+                            document.getElementById("result").innerHTML = '*' + object.message;
+                        }
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+
+                e.preventDefault();
+            }
+
+            $('#Login_Form').submit(processForm);
+        })(jQuery);
+    </script>
+
+
+
+
+</body>
+
+</html>

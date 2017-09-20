@@ -1,0 +1,130 @@
+<html>
+
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular-route.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+
+
+<body background="/img/assinatura1.jpg">
+    <nav class="navbar navbar-inverse" role="navigation" style="padding-left:130px;">
+        <ul class="nav navbar-nav">
+
+            <li><a href="/"><span class="glyphicon glyphicon-home"></span>&nbsp;Home</a></li>
+            <li><a href="/about">About us</a></li>
+            <li><a href="/contact">Contact us</a></li>
+            <li class="active"><a href="/register">Register<span class="sr-only">(current)</span></a></li>
+            <li style="margin-left: 780px;"><a href="/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login </a></li>
+        </ul>
+    </nav>
+    <div style="padding-left:33%; position:absolute" class="container">
+        <div class="row main">
+            <div class="panel-heading">
+                <div class="panel-title text-center">
+                    <h1 style="margin-left:auto; margin-right:auto; color:whitesmoke; position:absolute" class="form-signin-heading">Rethink</h1>
+                    <br>
+                    <br>
+                    <hr />
+                </div>
+            </div>
+            <div class="main-login main-center">
+                <form class="col-xs-4" method="post" action="#" id="my-form">
+
+                    <div class="form-group">
+                        <label for="name" style="color:whitesmoke" class="cols-sm-2 control-label">Your Name</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Enter your Name" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username" style="color:whitesmoke" class="cols-sm-2 control-label">Username</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" name="username" id="username" placeholder="Enter your Username" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" style="color:whitesmoke" class="cols-sm-2 control-label">Password</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Enter your Password" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm" style="color:whitesmoke" class="cols-sm-2 control-label">Confirm Password</label>
+                        <div class="cols-sm-10">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                                <input type="password" class="form-control" name="confirm" id="confirm" placeholder="Confirm your Password" required />
+                            </div>
+                        </div>
+                    </div>
+                    </br>
+                    <div class="form-group ">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block login-button">Register</button>
+                        <div id="result" style="color:red;"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function ($) {
+            function processForm(e) {
+                var object = new Object({
+                    nome: String,
+                    login: String,
+                    senha: String,
+                    confirm: String
+                });
+                object.nome = document.getElementById("name").value;
+                object.login = document.getElementById("username").value;
+                object.senha = document.getElementById("password").value;
+                object.confirm = document.getElementById("confirm").value;
+
+                $.ajax({
+                    url: 'http://localhost:8000/api/usuarios/',
+                    dataType: 'json',
+                    type: 'post',
+                    contentType: 'application/x-www-form-urlencoded',
+                    data: object,
+                    success: function (object, textStatus, jQxhr) {
+                        $('#response pre').html(object);
+                        if (object.message == 'Usuário criado!') {
+                            window.localStorage.setItem('usuario', JSON.stringify(object.usuario));
+                            document.getElementById("result").innerHTML = '*' + object.message;
+                        } else if (object.message == 'Senha diferente da confirmação!')
+                            document.getElementById("result").innerHTML = '*' + object.message;
+
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+
+                e.preventDefault();
+            }
+
+            $('#my-form').submit(processForm);
+        })(jQuery);
+    </script>
+</body>
+
+</html>

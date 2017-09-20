@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular-route.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script>
+        window.onload = function what() {
+            var usuario = localStorage.getItem("usuario");
+            var objeto = JSON.parse(usuario);
+            document.getElementById("result").innerHTML = objeto.nome;
+            document.getElementById("nome").innerHTML = objeto.nome;
+            document.getElementById("login").innerHTML = objeto.login;
+            document.getElementById("senha").innerHTML = objeto.senha;
+        }
+    </script>
+
+
+</head>
+
+<body background="/img/assinatura1.jpg">
+    <div>
+        <div>
+            <nav class="navbar navbar-inverse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li style="font-size:13pt;padding-top: 12px; padding-left: 10px; color:#fff;">Olá,&nbsp;
+                        <div style="float:right;" id="result"> </div>
+                    </li>
+                    <li class="confirm-link" data-toggle="modal" data-target=".bs-example-modal-sm" style="margin-left: 1160px;"><a href="#"><span class="glyphicon glyphicon-log-out"></span>&nbsp; Logout</a></li>
+                    <div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4>Logout <i class="fa fa-lock"></i></h4>
+                                </div>
+                                <div class="modal-body"><i class="fa fa-question-circle"></i> Are you sure you want to log-off?</div>
+                                <div class="modal-footer"><a href="/" class="btn btn-primary btn-block">Logout</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+            </nav>
+
+        </div>
+        <br/>
+        <div class="jumbotron">
+            <p>
+                <div id="nome"></div>
+                <div id="login"></div>
+                <div id="senha"></div>
+
+            </p>
+        </div>
+    </div>
+    <script>
+        $.ajax({
+            type: "GET",
+            url: "manageproducts.do",
+            data: "option=1",
+            success: function (msg) {
+                if (xmlHttp.readyState == 4) {
+                    if (xmlHttp.status == 200) {
+                        document.getElementById("get").innerHTML = xmlHttp.responseText;
+
+                    }
+                }
+            }
+        });
+        $('#myModal').on('show', function () {
+            var link = $(this).data('link'),
+                agreeBtn = $(this).find('.agree');
+        })
+
+        $('.confirm-link').on('click', function (e) {
+            e.preventDefault();
+
+            var link = $(this).data('link');
+            $('#myModal').data('link', link).modal('show');
+        });
+
+        $('#btnYes').click(function () {
+            // handle redirect here
+            var link = $('#myModal').data('link');
+            location.href = link;
+            $('#myModal').modal('hide');
+        });
+    </script>
+</body>
+
+</html>
